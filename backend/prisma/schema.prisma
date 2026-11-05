@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  DESIGNER
+  SECURITY_LEAD
+  ADMIN
+}
+
+enum Severity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IssueStatus {
+  OPEN
+  RESOLVED
+  IGNORED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(DESIGNER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  scans Scan[]
+
+  @@map("users")
+}
+
+model Scan {
+  id            String   @id @default(uuid())
+  figmaFileKey  String
+  figmaFileName String
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+
+  issues ScanIssue[]
+
+  @@map("scans")
+}
+
+model ScanIssue {
+  id                  String      @id @default(uuid())
+  scanId              String
+  scan                Scan        @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  nodeId              String      // Figma Canvas Node ID (e.g., "12:34")
+  nodeName            String      // Human-readable layer name
+  ruleId              String      // e.g., "SEC_PASSWORD_MASKING"
+  ruleName            String      // e.g., "Exposed Plaintext Password"
+  severity            Severity
+  description         String
+  suggestedFix        String?     // Guidance or automated replacement value
+  status              IssueStatus @default(OPEN)
+  createdAt           DateTime    @default(now())
+
+  @@map("scan_issues")
+}
