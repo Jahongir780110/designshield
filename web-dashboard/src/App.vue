@@ -28,34 +28,34 @@ onMounted(fetchUser);
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+  <div class="min-h-screen bg-zinc-50 text-zinc-900 flex flex-col font-sans">
     <!-- Navbar -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <header class="border-b border-zinc-200 bg-white/90 backdrop-blur sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <!-- Logo -->
         <router-link to="/" class="flex items-center gap-3 group">
-          <span class="text-2xl p-2 bg-blue-500/10 border border-blue-500/20 rounded-lg group-hover:scale-105 transition-transform">
-            🛡️
-          </span>
+          <div class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-mono text-xs font-bold transition-transform group-hover:scale-105">
+            DS
+          </div>
           <div>
-            <span class="text-base font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+            <span class="text-sm font-bold tracking-tight text-zinc-900 block">
               DesignShield
             </span>
-            <span class="text-xs text-slate-400 block -mt-1 font-mono">Enterprise Security Portal</span>
+            <span class="text-[10px] text-zinc-500 font-mono block -mt-0.5">Enterprise Security Portal</span>
           </div>
         </router-link>
 
         <!-- User Profile & Logout -->
         <div v-if="user" class="flex items-center gap-4">
           <div class="text-right">
-            <span class="text-xs font-semibold text-slate-200 block">{{ user.name }}</span>
-            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span class="text-xs font-semibold text-zinc-900 block">{{ user.name }}</span>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
               {{ user.role }}
             </span>
           </div>
           <button
             @click="handleLogout"
-            class="text-xs text-slate-400 hover:text-red-400 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-red-500/30 transition-colors"
+            class="text-xs text-zinc-600 hover:text-black px-3 py-1.5 rounded-md border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-100 transition-colors"
           >
             Sign Out
           </button>

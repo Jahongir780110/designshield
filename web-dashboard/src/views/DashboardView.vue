@@ -55,69 +55,59 @@ onMounted(fetchScans);
 <template>
   <div class="space-y-8">
     <!-- Page Header -->
-    <div>
-      <h1 class="text-2xl font-bold text-slate-100">Design Security Audits</h1>
-      <p class="text-xs text-slate-400 mt-1">
-        Continuous security and privacy verification for your organization's Figma workflows.
-      </p>
+    <div class="flex justify-between items-end border-b border-zinc-200 pb-5">
+      <div>
+        <h1 class="text-xl font-bold tracking-tight text-zinc-900">Design Security Audits</h1>
+        <p class="text-xs text-zinc-500 mt-1">
+          Continuous security and privacy verification for your organization's Figma workflows.
+        </p>
+      </div>
+      <button
+        @click="fetchScans"
+        class="text-xs text-zinc-700 hover:text-black px-3 py-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 transition-colors shadow-sm"
+      >
+        Refresh
+      </button>
     </div>
 
-    <!-- Security KPI Cards -->
+    <!-- Minimal KPI Metric Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <!-- Total Audits -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 relative overflow-hidden">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-xs font-medium text-slate-400">Total Audits Run</span>
-            <div class="text-2xl font-bold text-slate-100 mt-1">{{ totalScans }}</div>
-          </div>
-          <span class="p-2.5 bg-blue-500/10 text-blue-400 rounded-lg text-lg">📊</span>
-        </div>
-        <span class="text-[10px] text-slate-500 block mt-3 font-mono">Live PostgreSQL metric</span>
+      <div class="bg-white border border-zinc-200 rounded-xl p-5 hover:border-zinc-300 shadow-sm transition-all">
+        <span class="text-xs font-medium text-zinc-500 block">Total Audits Run</span>
+        <div class="text-3xl font-bold font-mono text-zinc-900 mt-2">{{ totalScans }}</div>
+        <span class="text-[10px] text-zinc-400 block mt-3 font-mono">Live PostgreSQL metric</span>
       </div>
 
       <!-- Vulnerabilities Caught -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 relative overflow-hidden">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-xs font-medium text-slate-400">Vulnerabilities Caught In-Flight</span>
-            <div class="text-2xl font-bold text-orange-400 mt-1">{{ totalIssuesDetected }}</div>
-          </div>
-          <span class="p-2.5 bg-orange-500/10 text-orange-400 rounded-lg text-lg">🛡️</span>
-        </div>
-        <span class="text-[10px] text-emerald-400 block mt-3 font-medium">Prevented pre-production</span>
+      <div class="bg-white border border-zinc-200 rounded-xl p-5 hover:border-zinc-300 shadow-sm transition-all">
+        <span class="text-xs font-medium text-zinc-500 block">Vulnerabilities Caught In-Flight</span>
+        <div class="text-3xl font-bold font-mono text-zinc-900 mt-2">{{ totalIssuesDetected }}</div>
+        <span class="text-[10px] text-zinc-500 block mt-3 font-mono">Prevented pre-production</span>
       </div>
 
       <!-- Avg Issues per Mockup -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 relative overflow-hidden">
-        <div class="flex justify-between items-start">
-          <div>
-            <span class="text-xs font-medium text-slate-400">Avg Flaws Per Mockup</span>
-            <div class="text-2xl font-bold text-indigo-400 mt-1">{{ avgIssuesPerScan }}</div>
-          </div>
-          <span class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-lg text-lg">⚡</span>
-        </div>
-        <span class="text-[10px] text-slate-500 block mt-3 font-mono">Benchmark target: &lt; 1.0</span>
+      <div class="bg-white border border-zinc-200 rounded-xl p-5 hover:border-zinc-300 shadow-sm transition-all">
+        <span class="text-xs font-medium text-zinc-500 block">Avg Flaws Per Mockup</span>
+        <div class="text-3xl font-bold font-mono text-zinc-900 mt-2">{{ avgIssuesPerScan }}</div>
+        <span class="text-[10px] text-zinc-400 block mt-3 font-mono">Benchmark target: &lt; 1.0</span>
       </div>
     </div>
 
     <!-- Audits History Table -->
-    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
-        <h2 class="text-sm font-semibold text-slate-200">Recent Figma Canvas Audits</h2>
-        <button @click="fetchScans" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">
-          🔄 Refresh
-        </button>
+    <div class="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm">
+      <div class="px-6 py-4 border-b border-zinc-200 bg-zinc-50/70">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-zinc-600 font-mono">Recent Canvas Audits</h2>
       </div>
 
       <!-- Empty State -->
-      <div v-if="scans.length === 0 && !isLoading" class="p-12 text-center text-slate-500 text-xs">
+      <div v-if="scans.length === 0 && !isLoading" class="p-12 text-center text-zinc-400 text-xs">
         No design audits found. Run an audit from the Figma plugin to see live reports here.
       </div>
 
       <!-- Table -->
       <table v-else class="w-full text-left text-xs">
-        <thead class="bg-slate-950/50 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
+        <thead class="bg-zinc-50 text-zinc-500 uppercase font-mono text-[10px] border-b border-zinc-200">
           <tr>
             <th class="py-3 px-6">Figma Document</th>
             <th class="py-3 px-6">Audited By (Designer)</th>
@@ -126,32 +116,32 @@ onMounted(fetchScans);
             <th class="py-3 px-6 text-right">Report</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-800">
-          <tr v-for="scan in scans" :key="scan.id" class="hover:bg-slate-800/40 transition-colors">
+        <tbody class="divide-y divide-zinc-200">
+          <tr v-for="scan in scans" :key="scan.id" class="hover:bg-zinc-50/80 transition-colors">
             <!-- 1. Document Name -->
-            <td class="py-4 px-6 font-medium text-slate-200">
-              <span class="inline-block mr-2">🎨</span>{{ scan.figmaFileName }}
+            <td class="py-4 px-6 font-semibold text-zinc-900">
+              {{ scan.figmaFileName }}
             </td>
 
             <!-- 2. Designer Info (Author) -->
             <td class="py-4 px-6">
               <div v-if="scan.user" class="flex flex-col">
-                <span class="font-medium text-slate-200 text-xs">{{ scan.user.name }}</span>
-                <span class="text-[10px] text-slate-500 font-mono">{{ scan.user.email }}</span>
+                <span class="font-medium text-zinc-800 text-xs">{{ scan.user.name }}</span>
+                <span class="text-[10px] text-zinc-400 font-mono">{{ scan.user.email }}</span>
               </div>
-              <span v-else class="text-slate-600 text-xs italic">Unknown</span>
+              <span v-else class="text-zinc-400 text-xs italic">Unknown</span>
             </td>
 
             <!-- 3. Date -->
-            <td class="py-4 px-6 text-slate-400">
+            <td class="py-4 px-6 text-zinc-500 font-mono text-[11px]">
               {{ formatDate(scan.createdAt) }}
             </td>
 
             <!-- 4. Findings Badge -->
             <td class="py-4 px-6">
               <span
-                class="px-2.5 py-1 rounded-full font-semibold font-mono text-[11px]"
-                :class="scan._count.issues > 0 ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'"
+                class="px-2.5 py-1 rounded-md text-[11px] font-mono font-medium"
+                :class="scan._count.issues > 0 ? 'bg-zinc-100 text-zinc-900 border border-zinc-300' : 'bg-zinc-50 text-zinc-400 border border-zinc-200'"
               >
                 {{ scan._count.issues }} {{ scan._count.issues === 1 ? 'flaw' : 'flaws' }}
               </span>
@@ -161,7 +151,7 @@ onMounted(fetchScans);
             <td class="py-4 px-6 text-right">
               <router-link
                 :to="`/scans/${scan.id}`"
-                class="text-xs text-blue-400 hover:text-blue-300 font-medium hover:underline inline-flex items-center gap-1"
+                class="text-xs text-zinc-900 hover:text-black font-semibold hover:underline inline-flex items-center gap-1"
               >
                 Inspect Report &rarr;
               </router-link>
