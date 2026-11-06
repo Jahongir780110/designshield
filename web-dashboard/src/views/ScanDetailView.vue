@@ -21,6 +21,10 @@ interface ScanDetail {
   figmaFileKey: string;
   figmaFileName: string;
   createdAt: string;
+  user?: {
+    name: string;
+    email: string;
+  };
   issues: Issue[];
 }
 
@@ -69,6 +73,13 @@ onMounted(fetchScanDetail);
           <div class="flex items-center gap-2">
             <span class="text-xl">🎨</span>
             <h1 class="text-xl font-bold text-slate-100">{{ scan.figmaFileName }}</h1>
+          </div>
+           <!-- 👤 Designer Badge -->
+            <div v-if="scan.user" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-[11px]">
+              <span class="text-slate-400 font-mono">Designer:</span>
+              <span class="text-slate-200 font-semibold">{{ scan.user.name }}</span>
+              <span class="text-slate-500 text-[10px]">({{ scan.user.email }})</span>
+            </div>
           </div>
           <p class="text-xs text-slate-400 mt-1 font-mono">
             File Key: <span class="text-slate-300">{{ scan.figmaFileKey }}</span> • Audited on {{ formatDate(scan.createdAt) }}
@@ -130,6 +141,20 @@ onMounted(fetchScanDetail);
                 {{ issue.severity }}
               </span>
 
+              <!-- 🧠 AI vs ⚡ Static Engine Source Badge -->
+              <span
+                v-if="issue.ruleId.startsWith('AI_')"
+                class="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20 flex items-center gap-1 font-mono"
+              >
+                🧠 Gemini AI
+              </span>
+              <span
+                v-else
+                class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20 flex items-center gap-1 font-mono"
+              >
+                ⚡ Regex Rule
+              </span>
+
               <!-- Rule Name -->
               <h3 class="text-sm font-semibold text-slate-200">{{ issue.ruleName }}</h3>
             </div>
@@ -152,6 +177,5 @@ onMounted(fetchScanDetail);
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>

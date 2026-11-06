@@ -7,6 +7,10 @@ interface ScanSummary {
   figmaFileKey: string;
   figmaFileName: string;
   createdAt: string;
+  user?: {
+    name: string;
+    email: string;
+  };
   _count: {
     issues: number;
   };
@@ -116,7 +120,7 @@ onMounted(fetchScans);
         <thead class="bg-slate-950/50 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
           <tr>
             <th class="py-3 px-6">Figma Document</th>
-            <th class="py-3 px-6">File Identifier</th>
+            <th class="py-3 px-6">Audited By (Designer)</th>
             <th class="py-3 px-6">Scan Date</th>
             <th class="py-3 px-6">Findings</th>
             <th class="py-3 px-6 text-right">Report</th>
@@ -124,15 +128,26 @@ onMounted(fetchScans);
         </thead>
         <tbody class="divide-y divide-slate-800">
           <tr v-for="scan in scans" :key="scan.id" class="hover:bg-slate-800/40 transition-colors">
+            <!-- 1. Document Name -->
             <td class="py-4 px-6 font-medium text-slate-200">
               <span class="inline-block mr-2">🎨</span>{{ scan.figmaFileName }}
             </td>
-            <td class="py-4 px-6 font-mono text-slate-400 text-[11px]">
-              {{ scan.figmaFileKey }}
+
+            <!-- 2. Designer Info (Author) -->
+            <td class="py-4 px-6">
+              <div v-if="scan.user" class="flex flex-col">
+                <span class="font-medium text-slate-200 text-xs">{{ scan.user.name }}</span>
+                <span class="text-[10px] text-slate-500 font-mono">{{ scan.user.email }}</span>
+              </div>
+              <span v-else class="text-slate-600 text-xs italic">Unknown</span>
             </td>
+
+            <!-- 3. Date -->
             <td class="py-4 px-6 text-slate-400">
               {{ formatDate(scan.createdAt) }}
             </td>
+
+            <!-- 4. Findings Badge -->
             <td class="py-4 px-6">
               <span
                 class="px-2.5 py-1 rounded-full font-semibold font-mono text-[11px]"
@@ -141,6 +156,8 @@ onMounted(fetchScans);
                 {{ scan._count.issues }} {{ scan._count.issues === 1 ? 'flaw' : 'flaws' }}
               </span>
             </td>
+
+            <!-- 5. Inspect Link -->
             <td class="py-4 px-6 text-right">
               <router-link
                 :to="`/scans/${scan.id}`"

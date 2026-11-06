@@ -19,8 +19,8 @@ export class ScanController {
 
     static async listScans(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.user!.userId;
-            const scans = await ScanService.getUserScans(userId);
+            const { userId, role } = req.user!;
+            const scans = await ScanService.getUserScans(userId, role);
 
             res.status(200).json({
                 success: true,
@@ -33,10 +33,9 @@ export class ScanController {
 
     static async getScan(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.user!.userId;
-            const scanId = req.params.id as string; // <-- Safely assert as string
-
-            const scan = await ScanService.getScanById(scanId, userId);
+            const { userId, role } = req.user!;
+            const scanId = req.params.id as string;
+            const scan = await ScanService.getScanById(scanId, userId, role);
 
             res.status(200).json({
                 success: true,

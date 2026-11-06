@@ -55,13 +55,20 @@ export class ScanService {
     }
 
     /**
-     * Fetches all scans belonging to a user
-     */
-    static async getUserScans(userId: string) {
+ * Fetches scans:
+ * - SECURITY_LEAD / ADMIN sees all company-wide scans!
+ * - DESIGNER only sees their own scans.
+ */
+    static async getUserScans(userId: string, role: string) {
+        const isLeadOrAdmin = role === "SECURITY_LEAD" || role === "ADMIN";
+
         return prisma.scan.findMany({
-            where: { userId },
+            where: isLeadOrAdmin ? {} : { userId }, // <-- RBAC in action!
             orderBy: { createdAt: "desc" },
             include: {
+                user: {
+                    select: { name: true, email: true }, // Display who ran each scan
+                },
                 _count: {
                     select: { issues: true },
                 },
@@ -69,17 +76,19 @@ export class ScanService {
         });
     }
 
-    /**
-     * Fetches a specific scan and its findings
-     */
-    static async getScanById(scanId: string, userId: string) {
+    static async getScanById(scanId: string, userId: string, role: string) {
+        const isLeadOrAdmin = role === "SECURITY_LEAD" || role === "ADMIN";
+
         const scan = await prisma.scan.findFirst({
-            where: { id: scanId, userId },
-            include: { issues: true },
+            where: isLeadOrAdmin ? { id: scanId } : { id: scanId, userId },
+            include: {
+                user: { select: { name: true, email: true } },
+                issues: true,
+            },
         });
 
         if (!scan) {
-            const error: any = new Error("Scan not found");
+            const error: any = new Error("Scan not found or access denied");
             error.statusCode = 404;
             throw error;
         }
