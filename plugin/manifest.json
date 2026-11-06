@@ -1,0 +1,16 @@
+{
+    "name": "DesignShield - Security & Privacy Linter",
+    "id": "designshield-security-linter",
+    "api": "1.0.0",
+    "main": "dist/code.js",
+    "ui": "dist/index.html",
+    "editorType": [
+        "figma"
+    ],
+    "networkAccess": {
+        "allowedDomains": [
+            "http://localhost:5000"
+        ],
+        "reasoning": "Connects to local DesignShield security and privacy linter backend"
+    }
+}
